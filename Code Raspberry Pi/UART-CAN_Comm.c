@@ -19,7 +19,6 @@ void main()
 {
     //Ouverture des ports
 
-
     //fork()
 
     //Processus fils(écoute le UART et envoie sur le SPI/CAN)
