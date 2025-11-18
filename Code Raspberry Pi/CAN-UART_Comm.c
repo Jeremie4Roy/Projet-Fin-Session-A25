@@ -1,8 +1,8 @@
 /**
 * @file UART-CAN_Comm.c
-* @brief Serial port programming in C. Reads the UART, writes in the CAN/SPI.
+* @brief Serial port programming in C. Reads the CAN/SPI, writes in the UART..
 * @author Jeremie Roy
-* @date 2025-11-17
+* @date 2025-11-18
 */
 
 #define _GNU_SOURCE
@@ -25,6 +25,5 @@ const char *portTTY = "/dev/ttyAMA0"; // ttyUSB0 is the FT232 based USB2SERIAL C
 
 void main()
 {
-    int fd;
     
 }
