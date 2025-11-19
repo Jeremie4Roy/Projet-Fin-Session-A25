@@ -3,6 +3,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Schema;
 
 namespace Poste_Commandes
 {
@@ -29,7 +30,7 @@ namespace Poste_Commandes
                     break;
             }
 
-            
+
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -44,6 +45,12 @@ namespace Poste_Commandes
         private void SendingTimer_Tick(object sender, EventArgs e)
         {
             serialPort.Write(ToggleButton.Text + "\n");
+        }
+
+        private void FormClosing(object sender, FormClosingEventArgs e)
+        {
+            MessageBox.Show("Shutting down", "Shutting down" , MessageBoxButtons.OK);
+            serialPort.Write("1345ABCDE\n");
         }
     }
 }

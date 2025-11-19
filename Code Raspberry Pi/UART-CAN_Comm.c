@@ -12,6 +12,7 @@
 #include <termios.h> // POSIX Terminal Control Definitions
 #include <unistd.h>  // UNIX Standard Definitions
 #include <errno.h>   // ERROR Number Definitions
+#include <string.h>
 
 // device port série à utiliser 
 //const char *portTTY = "/dev/ttyGS0"; 
@@ -33,8 +34,9 @@ void main()
         printf("\nErreur! ouverture de %s", portTTY);
     }else
     {
-        printf("\n Ouverture d %s réussite", portTTY);
+        printf("\n Ouverture de %s réussite\n", portTTY);
         struct termios SerialPortSettings;
+
         tcgetattr(fd, &SerialPortSettings);
 
         cfsetispeed(&SerialPortSettings, B19200);
@@ -48,18 +50,18 @@ void main()
 	
 	    SerialPortSettings.c_iflag &= ~(IXON | IXOFF | IXANY);          // Disable XON/XOFF flow control both i/p and o/p
 
-	    SerialPortSettings.c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG);  // Non Cannonical mode, Disable echo, Disable signal  
+	    SerialPortSettings.c_lflag &= ~( ICANON | ECHO | ECHOE | ISIG);  // Non Cannonical mode, Disable echo, Disable signal  
 
 	    SerialPortSettings.c_oflag &= ~OPOST;	// No Output Processing
 
         SerialPortSettings.c_cc[VMIN] = 0; // Read at least X character(s) 
-	    SerialPortSettings.c_cc[VTIME] = 100; // Wait 3sec (0 for indefinetly) 
+	    SerialPortSettings.c_cc[VTIME] = 30; // Wait 3sec (0 for indefinetly) 
 
         if((tcsetattr(fd, TCSANOW, &SerialPortSettings))!= 0)
         {
             printf("\nErreur! Configuration des attributs du port série");
         }else{
-
+            printf("Début de lecture: \n");
             while(1)
             {
                 tcflush(fd,TCIFLUSH);
@@ -67,10 +69,18 @@ void main()
                 int read_byte = 0;
                 int i = 0;
 
-                read_byte = read(fd,&SerialPortSettings, 32);
-                
+                read_byte = read(fd,&read_buffer, 32);
+              //  if(read_byte > 0)
+                //{
+                  printf("Données reçu: ");
+                  for(i = 0; i < read_byte; i++)
+                  {
+                      printf("%c",read_buffer[i]);
+                  }
+                  printf("\n");
+               // }
             }
         }
     }
-    //
+    
 }

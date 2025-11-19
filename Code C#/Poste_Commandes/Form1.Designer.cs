@@ -46,7 +46,6 @@
             // SendingTimer
             // 
             SendingTimer.Enabled = true;
-            SendingTimer.Interval = 1000;
             SendingTimer.Tick += SendingTimer_Tick;
             // 
             // Form1

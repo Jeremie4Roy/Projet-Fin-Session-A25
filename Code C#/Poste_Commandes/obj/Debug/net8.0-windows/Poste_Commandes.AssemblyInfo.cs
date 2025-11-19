@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Poste_Commandes")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0d248365c016a714513b5ea7d3653b26aa7a7de8")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4f568ef7695a8dbf0f7ee9ca879c9eb634f71404")]
 [assembly: System.Reflection.AssemblyProductAttribute("Poste_Commandes")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Poste_Commandes")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
