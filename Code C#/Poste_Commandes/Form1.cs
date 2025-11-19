@@ -40,6 +40,7 @@ namespace Poste_Commandes
             serialPort.BaudRate = 19200;
             serialPort.Open();
             serialPort.DiscardInBuffer();
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form_Closing);
         }
 
         private void SendingTimer_Tick(object sender, EventArgs e)
@@ -47,10 +48,10 @@ namespace Poste_Commandes
             serialPort.Write(ToggleButton.Text + "\n");
         }
 
-        private void FormClosing(object sender, FormClosingEventArgs e)
+        private void Form_Closing(object sender, FormClosingEventArgs e)
         {
-            MessageBox.Show("Shutting down", "Shutting down" , MessageBoxButtons.OK);
             serialPort.Write("1345ABCDE\n");
+            serialPort.Close();
         }
     }
 }
