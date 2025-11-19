@@ -1,7 +1,7 @@
 Code Raspberry Pi/UART-CAN_Comm
-Code C#/Poste_Commandes/bin
-Code C#/Poste_Commandes/obj
-Code C#/Poste_Commandes/.vs
+Code C#/Poste_Commandes/bin/*
+Code C#/Poste_Commandes/obj/*
+Code C#/Poste_Commandes/.vs/*
 *.sln
 *.csproj
 *.csproj.user
