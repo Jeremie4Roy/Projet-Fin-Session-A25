@@ -52,11 +52,11 @@ void main()
 	    SerialPortSettings.c_iflag &= ~(IXON | IXOFF | IXANY);          // Disable XON/XOFF flow control both i/p and o/p
 
 	    SerialPortSettings.c_lflag &= ~( ICANON | ECHO | ECHOE | ISIG);  // Non Cannonical mode, Disable echo, Disable signal  
-
+        //SerialPortSettings.c_lflag &= ~(ECHO | ECHOE | ISIG);  // Cannonical mode, Disable echo, Disable signal  
 	    SerialPortSettings.c_oflag &= ~OPOST;	// No Output Processing
 
         SerialPortSettings.c_cc[VMIN] = 0; // Read at least X character(s) 
-	    SerialPortSettings.c_cc[VTIME] = 30; // Wait 3sec (0 for indefinetly) 
+	    SerialPortSettings.c_cc[VTIME] = 10; // Wait 1sec (0 for indefinetly) 
 
         if((tcsetattr(fd, TCSANOW, &SerialPortSettings))!= 0)
         {
@@ -66,31 +66,26 @@ void main()
             char read_buffer[32] = "";
             int read_byte = 0;
             int i = 0;
-            while(read_buffer != "12345ABCDE\n")
+
+            while(!(read_buffer == "12345ABCDE\n"))
             {
                 tcflush(fd,TCIFLUSH);
                 read_byte = 0;
-                read_buffer[0] = "";
+                for (i = 0; i > 32; i++)
+                {
+                    read_buffer[i] = 0;
+                }
 
                 read_byte = read(fd,&read_buffer, 32);
-              //  if(read_byte > 0)
-                //{
-                printf ("Longueur reçu: %c ", read_byte + 48);
-                  printf("Données reçu: ");
-                  for(i = 0; i < read_byte; i++)
-                  {
-                      printf("%c",read_buffer[i]);
-                  }
-               // }
+                if(read_byte > 0)
+                {
+                    printf("Données reçu: ");
+                   for(i = 0; i < read_byte; i++)
+                    {
+                        printf("%c",read_buffer[i]);
+                    }
+                }
             }
-            
-            printf("Données reçu: ");
-            for(i = 0; i < read_byte; i++)
-            {
-                printf("%c",read_buffer[i]);
-            }
-            close(fd);
         }
     }
-    
 }
