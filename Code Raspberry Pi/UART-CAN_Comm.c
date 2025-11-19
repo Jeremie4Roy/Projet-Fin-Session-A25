@@ -32,6 +32,7 @@ void main()
     if(fd == -1)
     {
         printf("\nErreur! ouverture de %s", portTTY);
+        close(fd);
     }else
     {
         printf("\n Ouverture de %s réussite\n", portTTY);
@@ -62,24 +63,33 @@ void main()
             printf("\nErreur! Configuration des attributs du port série");
         }else{
             printf("Début de lecture: \n");
-            while(1)
+            char read_buffer[32] = "";
+            int read_byte = 0;
+            int i = 0;
+            while(read_buffer != "12345ABCDE\n")
             {
                 tcflush(fd,TCIFLUSH);
-                char read_buffer[32] = "";
-                int read_byte = 0;
-                int i = 0;
+                read_byte = 0;
+                read_buffer[0] = "";
 
                 read_byte = read(fd,&read_buffer, 32);
               //  if(read_byte > 0)
                 //{
+                printf ("Longueur reçu: %c ", read_byte + 48);
                   printf("Données reçu: ");
                   for(i = 0; i < read_byte; i++)
                   {
                       printf("%c",read_buffer[i]);
                   }
-                  printf("\n");
                // }
             }
+            
+            printf("Données reçu: ");
+            for(i = 0; i < read_byte; i++)
+            {
+                printf("%c",read_buffer[i]);
+            }
+            close(fd);
         }
     }
     
