@@ -13,6 +13,8 @@
 #include <unistd.h>  // UNIX Standard Definitions
 #include <errno.h>   // ERROR Number Definitions
 #include <string.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
 
 // device port série à utiliser 
 //const char *portTTY = "/dev/ttyGS0"; 

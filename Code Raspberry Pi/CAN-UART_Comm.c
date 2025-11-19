@@ -12,6 +12,8 @@
 #include <termios.h> // POSIX Terminal Control Definitions
 #include <unistd.h>  // UNIX Standard Definitions
 #include <errno.h>   // ERROR Number Definitions
+#include <libssh/server.h>
+#include <libssh/libssh.h>
 
 // device port série à utiliser 
 //const char *portTTY = "/dev/ttyGS0"; 
