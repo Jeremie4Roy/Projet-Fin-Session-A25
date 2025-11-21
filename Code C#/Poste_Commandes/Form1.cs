@@ -3,7 +3,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Xml.Schema;
+using Renci.SshNet;
+
 
 namespace Poste_Commandes
 {
@@ -40,7 +41,8 @@ namespace Poste_Commandes
             serialPort.BaudRate = 19200;
             serialPort.Open();
             serialPort.DiscardInBuffer();
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form_Closing);
+            FormClosing += new FormClosingEventHandler(Form_Closing);
+            this.Text = "Hello There :)";
         }
 
         private void SendingTimer_Tick(object sender, EventArgs e)
@@ -50,8 +52,10 @@ namespace Poste_Commandes
 
         private void Form_Closing(object sender, FormClosingEventArgs e)
         {
-            serialPort.Write("12345ABCDE\n");//The Kill Code :)
+            serialPort.Write("12345ABCDE\n");
             serialPort.Close();
         }
     }
 }
+
+

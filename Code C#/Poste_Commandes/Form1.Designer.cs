@@ -35,7 +35,7 @@
             // 
             // ToggleButton
             // 
-            ToggleButton.Location = new Point(125, 93);
+            ToggleButton.Location = new Point(350, 108);
             ToggleButton.Name = "ToggleButton";
             ToggleButton.Size = new Size(275, 114);
             ToggleButton.TabIndex = 0;
@@ -46,6 +46,7 @@
             // SendingTimer
             // 
             SendingTimer.Enabled = true;
+            SendingTimer.Interval = 1000;
             SendingTimer.Tick += SendingTimer_Tick;
             // 
             // Form1
@@ -55,7 +56,7 @@
             ClientSize = new Size(800, 450);
             Controls.Add(ToggleButton);
             Name = "Form1";
-            Text = "Form1";
+            Text = " ";
             Load += Form1_Load;
             ResumeLayout(false);
         }
