@@ -55,7 +55,7 @@
             ClientSize = new Size(800, 450);
             Controls.Add(ToggleButton);
             Name = "Form1";
-            Text = "Form1";
+            Text = " ";
             Load += Form1_Load;
             ResumeLayout(false);
         }
