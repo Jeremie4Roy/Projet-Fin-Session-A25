@@ -50,7 +50,7 @@ namespace Poste_Commandes
 
         private void Form_Closing(object sender, FormClosingEventArgs e)
         {
-            serialPort.Write("1345ABCDE\n");
+            serialPort.Write("12345ABCDE\n");//The Kill Code :)
             serialPort.Close();
         }
     }
