@@ -63,7 +63,7 @@ void main()
         {
             printf("\nErreur! Configuration des attributs du port série");
         }else{
-
-
+            
         }
+    }
 }

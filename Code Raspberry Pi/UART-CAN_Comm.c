@@ -13,8 +13,7 @@
 #include <unistd.h>  // UNIX Standard Definitions
 #include <errno.h>   // ERROR Number Definitions
 #include <string.h>
-#include <sys/socket.h>
-#include <arpa/inet.h>
+
 
 // device port série à utiliser 
 //const char *portTTY = "/dev/ttyGS0"; 
@@ -27,17 +26,16 @@
 const char *portTTY = "/dev/ttyAMA0"; // ttyUSB0 is the FT232 based USB2SERIAL Converter
 
 void main()
-{
-    int fd;
+{    
     //Ouverture de ports
-    fd = open(portTTY, O_RDWR | O_NOCTTY);
+    int fd = open(portTTY, O_RDWR | O_NOCTTY);
     if(fd == -1)
     {
         printf("\nErreur! ouverture de %s", portTTY);
         close(fd);
     }else
     {
-        printf("\n Ouverture de %s réussite\n", portTTY);
+        printf("\n Ouverture de %s réussite\n", portTTY);//Préparation du port 
         struct termios SerialPortSettings;
 
         tcgetattr(fd, &SerialPortSettings);
@@ -69,11 +67,11 @@ void main()
             int read_byte = 0;
             int i = 0;
 
-            while(!(read_buffer == "12345ABCDE\n"))
+            while(1)
             {
                 tcflush(fd,TCIFLUSH);
                 read_byte = 0;
-                for (i = 0; i > 32; i++)
+                for (i = 0; i < 32; i++)
                 {
                     read_buffer[i] = 0;
                 }
@@ -86,6 +84,10 @@ void main()
                     {
                         printf("%c",read_buffer[i]);
                     }
+                }
+                if(strcmp(read_buffer, "12345ABCDE\n") == 0)
+                {
+                    return;
                 }
             }
         }
