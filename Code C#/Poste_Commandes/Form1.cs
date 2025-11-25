@@ -42,7 +42,6 @@ namespace Poste_Commandes
             serialPort.Open();
             serialPort.DiscardInBuffer();
             FormClosing += new FormClosingEventHandler(Form_Closing);
-            this.Text = "Hello There :)";
         }
 
         private void SendingTimer_Tick(object sender, EventArgs e)
@@ -54,6 +53,11 @@ namespace Poste_Commandes
         {
             serialPort.Write("12345ABCDE\n");
             serialPort.Close();
+        }
+
+        private void radioButton1_CheckedChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
