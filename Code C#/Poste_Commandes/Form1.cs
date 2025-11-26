@@ -11,7 +11,7 @@ namespace Poste_Commandes
     public partial class Form1 : Form
     {
         SerialPort serialPort;
-        SerialDataReceivedEventHandler serialDataReceived;
+
 
         public Form1()
         {
@@ -41,8 +41,16 @@ namespace Poste_Commandes
             serialPort.BaudRate = 19200;
             serialPort.Open();
             serialPort.DiscardInBuffer();
+            serialPort.DataReceived += new SerialDataReceivedEventHandler(SerialReception);
             FormClosing += new FormClosingEventHandler(Form_Closing);
+            CheckPorts();
         }
+
+        private void SerialReception(object sender, SerialDataReceivedEventArgs e)
+        {
+
+        }
+
 
         private void SendingTimer_Tick(object sender, EventArgs e)
         {
@@ -56,6 +64,38 @@ namespace Poste_Commandes
         }
 
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void CheckPorts()
+        {
+            string[] ports = SerialPort.GetPortNames();
+            PortsListe.Items.Clear();
+            PortsListe.Items.AddRange(ports);
+            try
+            {
+                PortsListe.SelectedItem = ports[0];
+            }
+            catch (IndexOutOfRangeException)
+            {
+                MessageBox.Show("Erreur: Aucun port trouvé");
+            }
+        }
+
+        private void PortsListe_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            serialPort.Close();
+            if (PortsListe.SelectedItem != null)
+            {
+                serialPort.PortName = PortsListe.SelectedItem.ToString();
+            }
+            serialPort.BaudRate = 19200;
+            serialPort.Open();
+
+        }
+
+        private void groupBox1_Enter(object sender, EventArgs e)
         {
 
         }

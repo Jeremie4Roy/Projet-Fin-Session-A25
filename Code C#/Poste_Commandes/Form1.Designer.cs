@@ -33,7 +33,7 @@
             SendingTimer = new System.Windows.Forms.Timer(components);
             label1 = new Label();
             label2 = new Label();
-            comboBox1 = new ComboBox();
+            PortsListe = new ComboBox();
             radioButton1 = new RadioButton();
             radioButton2 = new RadioButton();
             label3 = new Label();
@@ -41,15 +41,19 @@
             label5 = new Label();
             PoidPastille = new TextBox();
             PositionVéhicule = new TextBox();
+            groupBox1 = new GroupBox();
+            groupBox2 = new GroupBox();
+            groupBox1.SuspendLayout();
+            groupBox2.SuspendLayout();
             SuspendLayout();
             // 
             // ToggleButton
             // 
-            ToggleButton.Location = new Point(51, 76);
+            ToggleButton.Location = new Point(28, 69);
             ToggleButton.Name = "ToggleButton";
-            ToggleButton.Size = new Size(275, 114);
+            ToggleButton.Size = new Size(142, 114);
             ToggleButton.TabIndex = 0;
-            ToggleButton.Text = "On";
+            ToggleButton.Text = "Off";
             ToggleButton.UseVisualStyleBackColor = true;
             ToggleButton.Click += button1_Click;
             // 
@@ -63,7 +67,7 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 14F);
-            label1.Location = new Point(75, 34);
+            label1.Location = new Point(14, 17);
             label1.Name = "label1";
             label1.Size = new Size(174, 25);
             label1.TabIndex = 1;
@@ -73,19 +77,20 @@
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 14F);
-            label2.Location = new Point(483, 44);
+            label2.Location = new Point(56, 19);
             label2.Name = "label2";
             label2.Size = new Size(152, 25);
             label2.TabIndex = 2;
             label2.Text = "Connexion série:";
             // 
-            // comboBox1
+            // PortsListe
             // 
-            comboBox1.FormattingEnabled = true;
-            comboBox1.Location = new Point(497, 96);
-            comboBox1.Name = "comboBox1";
-            comboBox1.Size = new Size(121, 23);
-            comboBox1.TabIndex = 3;
+            PortsListe.FormattingEnabled = true;
+            PortsListe.Location = new Point(78, 65);
+            PortsListe.Name = "PortsListe";
+            PortsListe.Size = new Size(121, 23);
+            PortsListe.TabIndex = 3;
+            PortsListe.SelectedIndexChanged += PortsListe_SelectedIndexChanged;
             // 
             // radioButton1
             // 
@@ -156,11 +161,34 @@
             PositionVéhicule.Size = new Size(277, 23);
             PositionVéhicule.TabIndex = 10;
             // 
+            // groupBox1
+            // 
+            groupBox1.Controls.Add(label1);
+            groupBox1.Controls.Add(ToggleButton);
+            groupBox1.Location = new Point(37, 27);
+            groupBox1.Name = "groupBox1";
+            groupBox1.Size = new Size(311, 195);
+            groupBox1.TabIndex = 11;
+            groupBox1.TabStop = false;
+            groupBox1.Enter += groupBox1_Enter;
+            // 
+            // groupBox2
+            // 
+            groupBox2.Controls.Add(PortsListe);
+            groupBox2.Controls.Add(label2);
+            groupBox2.Location = new Point(413, 27);
+            groupBox2.Name = "groupBox2";
+            groupBox2.Size = new Size(292, 144);
+            groupBox2.TabIndex = 12;
+            groupBox2.TabStop = false;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(groupBox2);
+            Controls.Add(groupBox1);
             Controls.Add(PositionVéhicule);
             Controls.Add(PoidPastille);
             Controls.Add(label5);
@@ -168,13 +196,13 @@
             Controls.Add(label3);
             Controls.Add(radioButton2);
             Controls.Add(radioButton1);
-            Controls.Add(comboBox1);
-            Controls.Add(label2);
-            Controls.Add(label1);
-            Controls.Add(ToggleButton);
             Name = "Form1";
             Text = " ";
             Load += Form1_Load;
+            groupBox1.ResumeLayout(false);
+            groupBox1.PerformLayout();
+            groupBox2.ResumeLayout(false);
+            groupBox2.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -185,7 +213,7 @@
         private System.Windows.Forms.Timer SendingTimer;
         private Label label1;
         private Label label2;
-        private ComboBox comboBox1;
+        private ComboBox PortsListe;
         private RadioButton radioButton1;
         private RadioButton radioButton2;
         private Label label3;
@@ -193,5 +221,7 @@
         private Label label5;
         private TextBox PoidPastille;
         private TextBox PositionVéhicule;
+        private GroupBox groupBox1;
+        private GroupBox groupBox2;
     }
 }
