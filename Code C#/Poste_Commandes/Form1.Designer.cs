@@ -33,7 +33,7 @@
             SendingTimer = new System.Windows.Forms.Timer(components);
             label1 = new Label();
             label2 = new Label();
-            comboBox1 = new ComboBox();
+            PortsListe = new ComboBox();
             radioButton1 = new RadioButton();
             radioButton2 = new RadioButton();
             label3 = new Label();
@@ -79,13 +79,14 @@
             label2.TabIndex = 2;
             label2.Text = "Connexion série:";
             // 
-            // comboBox1
+            // PortsListe
             // 
-            comboBox1.FormattingEnabled = true;
-            comboBox1.Location = new Point(497, 96);
-            comboBox1.Name = "comboBox1";
-            comboBox1.Size = new Size(121, 23);
-            comboBox1.TabIndex = 3;
+            PortsListe.FormattingEnabled = true;
+            PortsListe.Location = new Point(497, 96);
+            PortsListe.Name = "PortsListe";
+            PortsListe.Size = new Size(121, 23);
+            PortsListe.TabIndex = 3;
+            PortsListe.SelectedIndexChanged += PortsListe_SelectedIndexChanged;
             // 
             // radioButton1
             // 
@@ -168,7 +169,7 @@
             Controls.Add(label3);
             Controls.Add(radioButton2);
             Controls.Add(radioButton1);
-            Controls.Add(comboBox1);
+            Controls.Add(PortsListe);
             Controls.Add(label2);
             Controls.Add(label1);
             Controls.Add(ToggleButton);
@@ -185,7 +186,7 @@
         private System.Windows.Forms.Timer SendingTimer;
         private Label label1;
         private Label label2;
-        private ComboBox comboBox1;
+        private ComboBox PortsListe;
         private RadioButton radioButton1;
         private RadioButton radioButton2;
         private Label label3;
