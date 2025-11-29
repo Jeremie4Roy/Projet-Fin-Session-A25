@@ -13,7 +13,9 @@
 #include <unistd.h>  // UNIX Standard Definitions
 #include <errno.h>   // ERROR Number Definitions
 #include <string.h>
-#include "CAN.h"
+//#include <string.h>
+#include "../Include/CAN.h"
+#include "../Include/UART.h"
 
 
 // device port série à utiliser 
@@ -24,7 +26,7 @@
 //const char *portTTY = "/dev/ttyS3";
 //const char *portTTY = "/dev/ttyS4";
 //const char *portTTY = "/dev/ttyS5";
-const char *portTTY = "/dev/ttyAMA0"; // ttyUSB0 is the FT232 based USB2SERIAL Converter
+const char *portTTY = "/dev/ttyAMA0"; // ttyAMA0 is the for uart with the pins
 
 void main()
 {    
