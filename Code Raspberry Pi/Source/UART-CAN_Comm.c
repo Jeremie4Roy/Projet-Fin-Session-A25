@@ -13,6 +13,7 @@
 #include <unistd.h>  // UNIX Standard Definitions
 #include <errno.h>   // ERROR Number Definitions
 #include <string.h>
+#include "CAN.h"
 
 
 // device port série à utiliser 
