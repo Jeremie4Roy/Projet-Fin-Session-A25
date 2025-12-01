@@ -7,8 +7,9 @@
 #ifndef UART
 #define UART
 
- void UartInit(char port[32], speed_t BaudRate);
+ void UartInit(speed_t BaudRate);
  void CloseUart();
  int fd;
+ struct termios SerialPortSettings;
 #endif
 

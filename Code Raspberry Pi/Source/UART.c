@@ -7,12 +7,11 @@
 #include <string.h>
 #include "../Include/UART.h"
 
-void UartInit(char port[32], speed_t BaudRate)
+void UartInit(speed_t BaudRate)
 {
-    fd =  open(port, O_RDWR | O_NOCTTY);
+    fd =  open("/dev/ttyAMA0", O_RDWR | O_NOCTTY);
     if(fd != -1)
     {
-        struct termios SerialPortSettings;
 
         tcgetattr(fd, &SerialPortSettings);
 
