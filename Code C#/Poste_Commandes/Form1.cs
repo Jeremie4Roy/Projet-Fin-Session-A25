@@ -14,6 +14,7 @@ namespace Poste_Commandes
         SerialPort serialPort;
         string ImagePath = "U:/A25/Projet Fin de session/Projet-Fin-Session-A25/Code C#/Poste_Commandes/Images/";
 
+
         public Form1()
         {
             InitializeComponent();
@@ -43,9 +44,14 @@ namespace Poste_Commandes
             serialPort.BaudRate = 19200;
             serialPort.Open();
             serialPort.DiscardInBuffer();
+<<<<<<< HEAD
             serialPort.DataReceived += new SerialDataReceivedEventHandler(SerialReception);
             FormClosing += new FormClosingEventHandler(Form_Closing);
             PositionVehiculeImage.Image = Image.FromFile(Path_To_Image);
+=======
+            serialPort.DataReceived += new SerialDataReceivedEventHandler(serialDataReceived);
+            FormClosing += new FormClosingEventHandler(Form_Closing);
+>>>>>>> 56a8191b17922e0ffaa4cec6e380f782907ddd16
             CheckPorts();
         }
 

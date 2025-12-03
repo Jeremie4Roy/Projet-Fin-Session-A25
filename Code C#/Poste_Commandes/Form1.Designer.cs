@@ -92,7 +92,11 @@
             // PortsListe
             // 
             PortsListe.FormattingEnabled = true;
+<<<<<<< HEAD
             PortsListe.Location = new Point(6, 69);
+=======
+            PortsListe.Location = new Point(497, 96);
+>>>>>>> 56a8191b17922e0ffaa4cec6e380f782907ddd16
             PortsListe.Name = "PortsListe";
             PortsListe.Size = new Size(121, 23);
             PortsListe.TabIndex = 3;
@@ -225,10 +229,24 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+<<<<<<< HEAD
             Controls.Add(groupBox4);
             Controls.Add(groupBox3);
             Controls.Add(groupBox2);
             Controls.Add(groupBox1);
+=======
+            Controls.Add(PositionVéhicule);
+            Controls.Add(PoidPastille);
+            Controls.Add(label5);
+            Controls.Add(label4);
+            Controls.Add(label3);
+            Controls.Add(radioButton2);
+            Controls.Add(radioButton1);
+            Controls.Add(PortsListe);
+            Controls.Add(label2);
+            Controls.Add(label1);
+            Controls.Add(ToggleButton);
+>>>>>>> 56a8191b17922e0ffaa4cec6e380f782907ddd16
             Name = "Form1";
             Text = " ";
             Load += Form1_Load;
