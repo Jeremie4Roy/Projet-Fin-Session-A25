@@ -29,37 +29,39 @@
 const char * portTTY = "/dev/ttyAMA0"; // ttyAMA0 is the for uart with the pins
 
 void main()
-{   UartInit(B19200);
+{    
+    UartInit(B19200);
+    //Ouverture de ports
+    
     if((tcsetattr(fd, TCSANOW, &SerialPortSettings))!= 0)
-       {
-           printf("\nErreur! Configuration des attributs du port série");
-       }else{
-           printf("Début de lecture: \n");
-           char read_buffer[32] = "";
-           int read_byte = 0;
-           int i = 0;
-           while(1)
-           {
-               tcflush(fd,TCIFLUSH);
-               read_byte = 0;
-               for (i = 0; i < 32; i++)
-               {
-                   read_buffer[i] = 0;
-               }
-               read_byte = read(fd,&read_buffer, 32);
-               if(read_byte > 0)
-               {
-                   printf("Données reçu: ");
-                  for(i = 0; i < read_byte; i++)
-                   {
-                       printf("%c",read_buffer[i]);
-                   }
-               }
-               if(strcmp(read_buffer, "12345ABCDE\n") == 0)
-               {
-                   return;
-               }
-           }
-       }
-   
+    {
+        printf("\nErreur! Configuration des attributs du port série");
+    }else{
+        printf("Début de lecture: \n");
+        char read_buffer[32] = "";
+        int read_byte = 0;
+        int i = 0;
+        while(1)
+        {
+            tcflush(fd,TCIFLUSH);
+            read_byte = 0;
+            for (i = 0; i < 32; i++)
+            {
+                read_buffer[i] = 0;
+            }
+            read_byte = read(fd,&read_buffer, 32);
+            if(read_byte > 0)
+            {
+                printf("Données reçu: ");
+               for(i = 0; i < read_byte; i++)
+                {
+                    printf("%c",read_buffer[i]);
+                }
+            }
+            if(strcmp(read_buffer, "12345ABCDE\n") == 0)
+            {
+                return;
+            }
+         }
+    }
 }
