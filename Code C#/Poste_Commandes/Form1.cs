@@ -1,9 +1,10 @@
+using Renci.SshNet;
 using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Renci.SshNet;
+using static Org.BouncyCastle.Crypto.Engines.SM2Engine;
 
 
 namespace Poste_Commandes
@@ -11,7 +12,7 @@ namespace Poste_Commandes
     public partial class Form1 : Form
     {
         SerialPort serialPort;
-
+        string ImagePath = "U:/A25/Projet Fin de session/Projet-Fin-Session-A25/Code C#/Poste_Commandes/Images/";
 
         public Form1()
         {
@@ -36,6 +37,7 @@ namespace Poste_Commandes
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            string Path_To_Image = ImagePath + "Vehicule_Perdu.png";
             serialPort = new SerialPort();
             serialPort.PortName = "COM20";
             serialPort.BaudRate = 19200;
@@ -43,6 +45,7 @@ namespace Poste_Commandes
             serialPort.DiscardInBuffer();
             serialPort.DataReceived += new SerialDataReceivedEventHandler(SerialReception);
             FormClosing += new FormClosingEventHandler(Form_Closing);
+            PositionVehiculeImage.Image = Image.FromFile(Path_To_Image);
             CheckPorts();
         }
 
@@ -92,11 +95,6 @@ namespace Poste_Commandes
             }
             serialPort.BaudRate = 19200;
             serialPort.Open();
-
-        }
-
-        private void groupBox1_Enter(object sender, EventArgs e)
-        {
 
         }
     }
