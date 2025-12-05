@@ -14,8 +14,8 @@
 #include <errno.h>   // ERROR Number Definitions
 #include <string.h>
 //#include <string.h>
-#include "../Include/CAN.h"
 #include "UART.c"
+
 
 
 // device port série à utiliser 
