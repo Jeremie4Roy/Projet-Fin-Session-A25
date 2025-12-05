@@ -15,6 +15,7 @@
 #include <string.h>
 //#include <string.h>
 #include "UART.c"
+#include "CAN.c"
 
 
 
