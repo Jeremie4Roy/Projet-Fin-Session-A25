@@ -52,17 +52,18 @@ void main()
             read_byte = read(fd, &read_buffer, 32);
             if (read_byte > 0)
             {
-                printf("Données reçu: ");
+                SendCANFrame(0x101, 0xFF, 1);
+               /* printf("Données reçu: ");
                 for (i = 0; i < read_byte; i++)
                 {
                     printf("%c", read_buffer[i]);
-                }
+                }*/
             }
-            if (strcmp(read_buffer, "12345ABCDE\n") == 0)
+            /*if (strcmp(read_buffer, "12345ABCDE\n") == 0)
             {
                 close(fd);
                 return;
-            }
+            }*/
         }
     }
 }
