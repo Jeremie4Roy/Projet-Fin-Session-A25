@@ -11,8 +11,7 @@
 #include <string.h>
 #include <unistd.h>
 
-
- /********************************************************* MCP RESET ****************************************************************/
+/********************************************************* MCP RESET ****************************************************************/
 void MCP2515_Reset()
 {
     uint8_t tx = RESET;
@@ -28,9 +27,9 @@ void MCP2515_Read(uint8_t address, uint8_t *data, size_t length)
     uint8_t rx[length + 2];
     tx[0] = READ;
     tx[1] = address;
-    memset(&tx[2], 0x00, length); // Remplir le reste avec des zéros
+    memset(&tx[2], 0x00, length);     // Remplir le reste avec des zéros
     SPI_Transfer(tx, rx, length + 2); // Transfert SPI
-    memcpy(data, &rx[2], length); // Copier les données reçues
+    memcpy(data, &rx[2], length);     // Copier les données reçues
 }
 /***********************************************************************************************************************************/
 
@@ -40,7 +39,7 @@ void MCP2515_Write(uint8_t address, uint8_t *data, size_t length)
     uint8_t tx[length + 2];
     tx[0] = WRITE;
     tx[1] = address;
-    memcpy(&tx[2], data, length); // Copier les données à écrire
+    memcpy(&tx[2], data, length);       // Copier les données à écrire
     SPI_Transfer(tx, NULL, length + 2); // Transfert SPI
 }
 /***********************************************************************************************************************************/
@@ -61,19 +60,19 @@ void MCP2515_BitModify(uint8_t address, uint8_t mask, uint8_t data)
 void MCP2515_RTS(uint8_t tx_buffer)
 {
     uint8_t rts_command;
-    switch(tx_buffer)
+    switch (tx_buffer)
     {
-        case 0:
-            rts_command = RTS_TXB0; // 0x80
-            break;
-        case 1:
-            rts_command = RTS_TXB1; // 0x82
-            break;
-        case 2:
-            rts_command = RTS_TXB2; // 0x84
-            break;
-        default:
-            return; // Invalid buffer number
+    case 0:
+        rts_command = RTS_TXB0; // 0x80
+        break;
+    case 1:
+        rts_command = RTS_TXB1; // 0x82
+        break;
+    case 2:
+        rts_command = RTS_TXB2; // 0x84
+        break;
+    default:
+        return; // Invalid buffer number
     }
     SPI_Transfer(&rts_command, NULL, 1);
 }
@@ -82,10 +81,10 @@ void MCP2515_RTS(uint8_t tx_buffer)
 /******************************************************* MCP RX Status *************************************************************/
 uint8_t MCP2515_RXSTATUS()
 {
-    uint8_t tx[2] = {RX_STATUS, 0x00};  
+    uint8_t tx[2] = {RX_STATUS, 0x00};
     uint8_t rx[2] = {0x00, 0x00};
-    SPI_Transfer(tx, rx, 2);  
-    return rx[1]; 
+    SPI_Transfer(tx, rx, 2);
+    return rx[1];
 }
 /***********************************************************************************************************************************/
 
@@ -102,16 +101,20 @@ uint8_t MCP2515_ReadStatus()
 /**************************************************** MCP READ RX BUFFER ***********************************************************/
 void MCP2515_ReadRxBuffer(uint8_t buffer, uint8_t *data, size_t length, uint8_t extended)
 {
-    if(length > 8) length = 8;
+    if (length > 8)
+        length = 8;
 
     uint8_t command;
-    
-    if(buffer == 0) command = READ_RXB0_STD;      // 0x90
-    else if(buffer == 1) command = READ_RXB1_STD; // 0x98
-    else return;
+
+    if (buffer == 0)
+        command = READ_RXB0_STD; // 0x90
+    else if (buffer == 1)
+        command = READ_RXB1_STD; // 0x98
+    else
+        return;
 
     // Il faut lire 5 octets de plus pour SIDH, SIDL, EID8, EID0, DLC
-    uint8_t tx[length + 6];  // +1 commande, +5 octets d'entête
+    uint8_t tx[length + 6]; // +1 commande, +5 octets d'entête
     uint8_t rx[length + 6];
 
     tx[0] = command;
@@ -127,16 +130,24 @@ void MCP2515_ReadRxBuffer(uint8_t buffer, uint8_t *data, size_t length, uint8_t 
 /************************************************** MCP Load TX Buffer *************************************************************/
 void MCP2515_LoadTxBuffer(uint8_t tx_buffer, uint8_t *data, size_t length, uint8_t extended)
 {
-    if(length > 8) length = 8; // max 8 octets de données
+    if (length > 8)
+        length = 8; // max 8 octets de données
     uint8_t command = 0;
 
     // Choix du buffer et de la zone DATA0..DATA7
-    switch(tx_buffer)
+    switch (tx_buffer)
     {
-        case 0: command = LOAD_TXB0_D0; break; // TXB0 DATA0..7
-        case 1: command = LOAD_TXB1_D0; break; // TXB1 DATA0..7
-        case 2: command = LOAD_TXB2_D0; break; // TXB2 DATA0..7
-        default: return; // invalid buffer
+    case 0:
+        command = LOAD_TXB0_D0;
+        break; // TXB0 DATA0..7
+    case 1:
+        command = LOAD_TXB1_D0;
+        break; // TXB1 DATA0..7
+    case 2:
+        command = LOAD_TXB2_D0;
+        break; // TXB2 DATA0..7
+    default:
+        return; // invalid buffer
     }
 
     // Créer tableau SPI : commande + données
@@ -154,10 +165,11 @@ void MCP2515_SetMode(uint8_t mode)
 {
     MCP2515_BitModify(MCP_CANCTRL, 0xE0, mode);
     uint8_t canstat = 0;
-    do {
+    do
+    {
         MCP2515_Read(MCP_CANSTAT, &canstat, 1);
         canstat &= 0xE0; // garder uniquement les bits de mode
-    } while(canstat != mode);
+    } while (canstat != mode);
 }
 /***********************************************************************************************************************************/
 
@@ -166,35 +178,35 @@ int MCP2515_SetBitrate(uint16_t bitrate_kbps)
 {
     uint8_t cnf1, cnf2, cnf3;
 
-    switch(bitrate_kbps)
+    switch (bitrate_kbps)
     {
-        case 125:  // 125 kbps
-            // On simule un quartz de 16 MHz
-            cnf1 = 0x03; // BRP=3 → TQ = 4/16MHz = 0.25µs
-            cnf2 = 0x90; // BTLMODE=1, SAM=0, PHSEG1=4TQ, PRSEG=1TQ
-            cnf3 = 0x02; // PHSEG2=5TQ, WAKFIL=0
-            break;
-
-        case 250:  // 250 kbps
-            cnf1 = 0x01; 
-            cnf2 = 0xB1;
-            cnf3 = 0x05;
-            break;
-
-        case 500:  // 500 kbps
-            cnf1 = 0x00;
-            cnf2 = 0x90;
-            cnf3 = 0x02;
-            break;
-
-        case 50:   // 50 kbps
-        cnf1 = 0x07;  
-        cnf2 = 0xB1;  
-        cnf3 = 0x05;  
+    case 125: // 125 kbps
+        // On simule un quartz de 16 MHz
+        cnf1 = 0x03; // BRP=3 → TQ = 4/16MHz = 0.25µs
+        cnf2 = 0x90; // BTLMODE=1, SAM=0, PHSEG1=4TQ, PRSEG=1TQ
+        cnf3 = 0x02; // PHSEG2=5TQ, WAKFIL=0
         break;
 
-        default:
-            return -1; // Bitrate non supporté
+    case 250: // 250 kbps
+        cnf1 = 0x01;
+        cnf2 = 0xB1;
+        cnf3 = 0x05;
+        break;
+
+    case 500: // 500 kbps
+        cnf1 = 0x00;
+        cnf2 = 0x90;
+        cnf3 = 0x02;
+        break;
+
+    case 50: // 50 kbps
+        cnf1 = 0x07;
+        cnf2 = 0xB1;
+        cnf3 = 0x05;
+        break;
+
+    default:
+        return -1; // Bitrate non supporté
     }
 
     MCP2515_Write(CNF1, &cnf1, 1);
@@ -208,10 +220,10 @@ int MCP2515_SetBitrate(uint16_t bitrate_kbps)
 /************************************************** MCP Configure RX Filters *******************************************************/
 void MCP2515_ConfigRxFilters(uint8_t disable_filters)
 {
-    uint8_t mask = 0x00;   /* Masques RX */
-    uint8_t rxb  = 0x60;   /* Contrôle RXB0 et RXB1 : filtre standard */
+    uint8_t mask = 0x00; /* Masques RX */
+    uint8_t rxb = 0x60;  /* Contrôle RXB0 et RXB1 : filtre standard */
 
-    if(disable_filters)
+    if (disable_filters)
     {
         /* Masques RX à 0 pour accepter toutes les trames */
         MCP2515_Write(MCP_RXM0SIDH, &mask, 1);

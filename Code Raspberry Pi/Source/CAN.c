@@ -7,7 +7,7 @@
 #define _GNU_SOURCE
 #include "../Include/CAN.h"
 #include "MCP2515.c"
-#include "SPI.h"    
+#include "../Include/SPI.h"
 #include <stdio.h>
 #include <pthread.h>
 #include <unistd.h>
@@ -15,12 +15,13 @@
 /****************************************************** Send Can Frame *************************************************************/
 void SendCANFrame(uint16_t id, uint8_t *data, uint8_t length)
 {
-    if(length > 8) length = 8;
+    if (length > 8)
+        length = 8;
 
     // Conversion ID standard (11 bits) en SIDH / SIDL
-    uint8_t sidh = (id >> 3) & 0xFF;  // bits 10..3
-    uint8_t sidl = (id & 0x07) << 5;  // bits 2..0 dans bits 7..5
-    uint8_t dlc  = length & 0x0F;     // max 8 octets de données
+    uint8_t sidh = (id >> 3) & 0xFF; // bits 10..3
+    uint8_t sidl = (id & 0x07) << 5; // bits 2..0 dans bits 7..5
+    uint8_t dlc = length & 0x0F;     // max 8 octets de données
 
     // Écrire SIDH / SIDL / DLC dans TXB0
     MCP2515_Write(MCP_TXB0SIDH, &sidh, 1);
@@ -42,7 +43,7 @@ int ReadCANFrame(uint16_t *id, uint8_t *data, uint8_t *length)
     // Lire le statut RX (RXnIF)
     uint8_t status = MCP2515_RXSTATUS();
 
-    if(status & 0x40) // RXB0 a reçu une trame (RX0IF)
+    if (status & 0x40) // RXB0 a reçu une trame (RX0IF)
     {
         uint8_t sidh, sidl, dlc;
 
@@ -56,7 +57,7 @@ int ReadCANFrame(uint16_t *id, uint8_t *data, uint8_t *length)
         *length = dlc & 0x0F;
 
         // Lire les données
-        for(uint8_t i = 0; i < *length; i++)
+        for (uint8_t i = 0; i < *length; i++)
         {
             MCP2515_Read(MCP_RXB0D0 + i, &data[i], 1);
         }
@@ -65,7 +66,7 @@ int ReadCANFrame(uint16_t *id, uint8_t *data, uint8_t *length)
         MCP2515_BitModify(MCP_CANINTF, 0x01, 0x00);
         return 1;
     }
-    else if(status & 0x80) // RXB1 a reçu une trame (RX1IF)
+    else if (status & 0x80) // RXB1 a reçu une trame (RX1IF)
     {
         uint8_t sidh, sidl, dlc;
 
@@ -79,7 +80,7 @@ int ReadCANFrame(uint16_t *id, uint8_t *data, uint8_t *length)
         *length = dlc & 0x0F;
 
         // Lire les données
-        for(uint8_t i = 0; i < *length; i++)
+        for (uint8_t i = 0; i < *length; i++)
         {
             MCP2515_Read(MCP_RXB1D0 + i, &data[i], 1);
         }
@@ -94,18 +95,18 @@ int ReadCANFrame(uint16_t *id, uint8_t *data, uint8_t *length)
 /***********************************************************************************************************************************/
 
 /***************************************************Send Can Frame with weight******************************************************/
-void SendCanFrame_Float (uint16_t id, float value)
+void SendCanFrame_Float(uint16_t id, float value)
 {
     uint8_t data[8];
-    int entier = (int)value;                    // ex : 39
+    int entier = (int)value;                     // ex : 39
     int decimal = (int)((value - entier) * 100); // ex : 65
 
     // Extraction des chiffres → caractères avec '0'
-    data[0] = (entier / 10) + '0';   // '3'
-    data[1] = (entier % 10) + '0';   // '9'
-    data[2] = '.';                   // '.'
-    data[3] = (decimal / 10) + '0';  // '6'
-    data[4] = (decimal % 10) + '0';  // '5'
+    data[0] = (entier / 10) + '0';  // '3'
+    data[1] = (entier % 10) + '0';  // '9'
+    data[2] = '.';                  // '.'
+    data[3] = (decimal / 10) + '0'; // '6'
+    data[4] = (decimal % 10) + '0'; // '5'
 
     // Envoi des 5 caractères
     SendCANFrame(id, data, 5);
@@ -117,17 +118,26 @@ void SendCanFrame_Float (uint16_t id, float value)
 /***********************************************************************************************************************************/
 
 /****************************************************Thread du RX*******************************************************************/
-void* CAN_Thread_RX(void* arg)
+void *CAN_Thread_RX(void *arg)
 {
     uint16_t id;
     uint8_t data[8];
     uint8_t len;
     (void)arg;
-    while(1)
+    while (1)
     {
         if (ReadCANFrame(&id, data, &len))
         {
-
+            if ((CAN_id != id) | (CAN_Buffer != data) | (CAN_Length != len))
+            {
+                CAN_id = id;
+                for (int i = 0; i < 8; i++)
+                {
+                    CAN_Buffer[i] = data[i];
+                }
+                CAN_Length = len;
+                CAN_Read_Flag = 1;
+            }
         }
         usleep(1000); // Evite 100% CPU
     }

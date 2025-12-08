@@ -6,11 +6,10 @@
  */
 
 #include "../Include/SPI.h"
-#include <stdio.h>        // perror, printf
-#include <fcntl.h>        // open()
-#include <unistd.h>       // close()
-#include <sys/ioctl.h>    // ioctl()
-
+#include <stdio.h>     // perror, printf
+#include <fcntl.h>     // open()
+#include <unistd.h>    // close()
+#include <sys/ioctl.h> // ioctl()
 
 /***************************************************** Variable SPI globale ****************************************************/
 int spi_file = -1;
@@ -28,7 +27,7 @@ int SPI_Init(void)
     uint8_t mode = SPI_MODE_SET;
     uint8_t bits = SPI_BITS_PER_WORD;
     uint32_t speed = SPI_SPEED_HZ;
-    if (ioctl(spi_file, SPI_IOC_WR_MODE, &mode) == -1 ||ioctl(spi_file, SPI_IOC_WR_BITS_PER_WORD, &bits) == -1 ||ioctl(spi_file, SPI_IOC_WR_MAX_SPEED_HZ, &speed) == -1)
+    if (ioctl(spi_file, SPI_IOC_WR_MODE, &mode) == -1 || ioctl(spi_file, SPI_IOC_WR_BITS_PER_WORD, &bits) == -1 || ioctl(spi_file, SPI_IOC_WR_MAX_SPEED_HZ, &speed) == -1)
     {
         perror("SPI_Init: Failed to set SPI parameters ");
         close(spi_file);
@@ -41,11 +40,14 @@ int SPI_Init(void)
 /******************************************************* Transfer SPI **********************************************************/
 int SPI_Transfer(uint8_t *tx_buffer, uint8_t *rx_buffer, size_t length)
 {
-    if(length == 0) return -1;
-    if(tx_buffer == NULL) return -1;
+    if (length == 0)
+        return -1;
+    if (tx_buffer == NULL)
+        return -1;
 
     uint8_t temp_rx[length];
-    if(rx_buffer == NULL) rx_buffer = temp_rx;
+    if (rx_buffer == NULL)
+        rx_buffer = temp_rx;
 
     struct spi_ioc_transfer transfer = {
         .tx_buf = (unsigned long)tx_buffer,
@@ -68,7 +70,7 @@ int SPI_Transfer(uint8_t *tx_buffer, uint8_t *rx_buffer, size_t length)
 /******************************************************** SPI Close ************************************************************/
 void SPI_Close(void)
 {
-    if(spi_file >= 0)
+    if (spi_file >= 0)
     {
         close(spi_file);
         spi_file = -1;
