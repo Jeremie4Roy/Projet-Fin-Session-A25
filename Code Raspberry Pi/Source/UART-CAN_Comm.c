@@ -43,21 +43,20 @@ void main()
         int i = 0;
         while (1)
         {
-            tcflush(fd, TCIFLUSH);
             read_byte = 0;
             for (i = 0; i < 32; i++)
             {
                 read_buffer[i] = 0;
             }
-            read_byte = read(fd, &read_buffer, 32);
+            read_byte = UartRead(&read_buffer, 32);
             if (read_byte > 0)
             {
                 SendCANFrame(0x101, 0xFF, 1);
-               /* printf("Données reçu: ");
+                printf("Données reçu: ");
                 for (i = 0; i < read_byte; i++)
                 {
                     printf("%c", read_buffer[i]);
-                }*/
+                }
             }
             /*if (strcmp(read_buffer, "12345ABCDE\n") == 0)
             {

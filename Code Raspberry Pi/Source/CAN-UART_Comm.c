@@ -48,6 +48,12 @@ void main()
             if (CAN_Read_Flag)
             {
                 CAN_Read_Flag = 0;
+
+                printf("Donnée reçu: ");
+                for (int i = 0; i < CAN_Length; i++)
+                {
+                    printf(CAN_Buffer[i]);
+                }
             }
         }
     }
