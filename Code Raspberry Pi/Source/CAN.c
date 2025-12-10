@@ -120,13 +120,14 @@ void SendCanFrame_Float(uint16_t id, float value)
 /****************************************************Thread du RX*******************************************************************/
 void *CAN_Thread_RX(void *arg)
 {
+    (void)arg;
     uint16_t id;
     uint8_t data[8];
     uint8_t len;
-    (void)arg;
+    
     while (1)
     {
-        if (ReadCANFrame(&id, data, &len))
+        if (ReadCANFrame(&id, data, &len) == 1)
         {
             if ((CAN_id != id) | (CAN_Buffer != data) | (CAN_Length != len))
             {

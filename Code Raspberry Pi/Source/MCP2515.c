@@ -221,7 +221,7 @@ int MCP2515_SetBitrate(uint16_t bitrate_kbps)
 void MCP2515_ConfigRxFilters(uint8_t disable_filters)
 {
     uint8_t mask = 0x00; /* Masques RX */
-    uint8_t rxb = 0x60;  /* Contrôle RXB0 et RXB1 : filtre standard */
+    uint8_t rxb = 0x64;  /* Contrôle RXB0 et RXB1 : filtre standard */
 
     if (disable_filters)
     {

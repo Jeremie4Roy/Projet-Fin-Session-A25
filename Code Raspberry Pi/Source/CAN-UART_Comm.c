@@ -29,33 +29,43 @@ const char *portTTY = "/dev/ttyAMA0"; // ttyUSB0 is the FT232 based USB2SERIAL C
 
 void main()
 {
+
     pthread_t thread_can_rx;
-    if (pthread_create(&thread_can_rx, NULL, CAN_Thread_RX, NULL) != 0)
+
+    if (MCP2515_Init() < 0)
     {
-        perror("Erreur création de thread CAN RX");
-        return;
-    }
-    printf("PThread démarré");
-    UartInit(B19200);
-    if ((tcsetattr(fd, TCSANOW, &SerialPortSettings)) != 0)
-    {
-        printf("\nErreur! Configuration des attributs du port série");
+        printf("Erreur de communication entre le SPI et le MCP2515");
     }
     else
     {
-        while (1)
+        if (pthread_create(&thread_can_rx, NULL, CAN_Thread_RX, NULL) != 0 )
         {
-            if (CAN_Read_Flag)
-            {
-                CAN_Read_Flag = 0;
+            perror("Erreur création de thread CAN RX");
+            return;
+        }
+        printf("PThread démarré");
+        UartInit(B19200);
+        if ((tcsetattr(fd, TCSANOW, &SerialPortSettings)) != 0)
+        {
+            printf("\nErreur! Configuration des attributs du port série");
+        }
+        else
+        {
 
-                printf("Donnée reçu: ");
-                for (int i = 0; i < CAN_Length; i++)
+            while (1)
+            {
+                if (CAN_Read_Flag)
                 {
-                    printf(CAN_Buffer[i]);
+                    CAN_Read_Flag = 0;
+
+                    printf("Donnée reçu: ");
+                    for (int i = 0; i < CAN_Length; i++)
+                    {
+                        printf("%c", CAN_Buffer[i]);
+                    }
                 }
             }
         }
+        pthread_join(thread_can_rx, NULL);
     }
-    pthread_join(thread_can_rx, NULL);
 }

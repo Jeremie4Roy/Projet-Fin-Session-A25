@@ -44,7 +44,7 @@ void UartWrite()
 {
 }
 
-UartRead(char *buffer[32], int length)
+int UartRead(char *buffer[32], int length)
 {
     tcflush(fd, TCIFLUSH);
     return read(fd, buffer, length);
