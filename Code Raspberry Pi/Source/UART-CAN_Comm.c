@@ -17,52 +17,48 @@
 #include "UART.c"
 #include "CAN.c"
 
-// device port série à utiliser
-// const char *portTTY = "/dev/ttyGS0";
-// const char *portTTY = "/dev/ttyS0";
-// const char *portTTY = "/dev/ttyS1";
-// const char *portTTY = "/dev/ttyS2";
-// const char *portTTY = "/dev/ttyS3";
-// const char *portTTY = "/dev/ttyS4";
-// const char *portTTY = "/dev/ttyS5";
-const char *portTTY = "/dev/ttyAMA0"; // ttyAMA0 is the for uart with the pins
-
 void main()
 {
-    UartInit(B19200);
-
-    if ((tcsetattr(fd, TCSANOW, &SerialPortSettings)) != 0)
+    if (UartInit(B19200) != 0)
     {
-        printf("\nErreur! Configuration des attributs du port série");
+        printf("Erreur: initionalisation uart");
     }
     else
     {
-        printf("Début de lecture: \n");
-        char read_buffer[32] = "";
-        int read_byte = 0;
-        int i = 0;
-        while (1)
+        if (MCP2515_Init() < 0)
         {
-            read_byte = 0;
-            for (i = 0; i < 32; i++)
+            printf("Erreur de communicaiton entre le SPI et le MCP2515");
+        }
+        else
+        {
+            printf("Début de lecture: \n");
+            char read_buffer[32] = "";
+            int read_byte = 0;
+            int i = 0;
+            while (1)
             {
-                read_buffer[i] = 0;
-            }
-            read_byte = UartRead(&read_buffer, 32);
-            if (read_byte > 0)
-            {
-                SendCANFrame(0x101, 0xFF, 1);
-                printf("Données reçu: ");
-                for (i = 0; i < read_byte; i++)
+                read_byte = 0;
+                for (i = 0; i < 32; i++)
                 {
-                    printf("%c", read_buffer[i]);
+                    read_buffer[i] = 0;
                 }
+                read_byte = UartRead(read_buffer, 32);
+                if (read_byte > 0)
+                {
+                    // SendCANFrame(0x101, 0xFF, 1);
+                    printf("Données reçu: ");
+                    for (i = 0; i < read_byte; i++)
+                    {
+                        printf("%c", read_buffer[i]);
+                    }
+                }
+                /*if (strcmp(read_buffer, "12345ABCDE\n") == 0)
+                {
+                    close(fd);
+                    return;
+                }*/
             }
-            /*if (strcmp(read_buffer, "12345ABCDE\n") == 0)
-            {
-                close(fd);
-                return;
-            }*/
         }
     }
+    CloseUart();
 }

@@ -1,51 +1,61 @@
 #define _GNU_SOURCE
-#include <stdio.h>
-#include <fcntl.h>   // File Control Definitions
-#include <termios.h> // POSIX Terminal Control Definitions
-#include <unistd.h>  // UNIX Standard Definitions
-#include <errno.h>   // ERROR Number Definitions
-#include <string.h>
 #include "../Include/UART.h"
 
-void UartInit(speed_t BaudRate)
+int fd;  // définition réelle
+struct termios SerialPortSettings;
+
+int UartInit(speed_t BaudRate)
 {
     fd = open("/dev/ttyAMA0", O_RDWR | O_NOCTTY);
-    if (fd != -1)
+
+    if (fd < 0)
     {
-
-        tcgetattr(fd, &SerialPortSettings);
-
-        cfsetispeed(&SerialPortSettings, BaudRate);
-
-        SerialPortSettings.c_cflag &= ~PARENB;        // Disables the Parity Enable bit(PARENB),So No Parity
-        SerialPortSettings.c_cflag &= ~CSTOPB;        // CSTOPB = 2 Stop bits,here it is cleared so 1 Stop bit
-        SerialPortSettings.c_cflag &= ~CSIZE;         // Clears the mask for setting the data size
-        SerialPortSettings.c_cflag |= CS8;            // Set the data bits = 8
-        SerialPortSettings.c_cflag &= ~CRTSCTS;       // No Hardware flow Control
-        SerialPortSettings.c_cflag |= CREAD | CLOCAL; // Enable receiver, Ignore Modem Control lines
-
-        SerialPortSettings.c_iflag &= ~(IXON | IXOFF | IXANY); // Disable XON/XOFF flow control both i/p and o/p
-
-        SerialPortSettings.c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG); // Non Cannonical mode, Disable echo, Disable signal
-                                                                       // SerialPortSettings.c_lflag &= ~(ECHO | ECHOE | ISIG);  // Cannonical mode, Disable echo, Disable signal
-        SerialPortSettings.c_oflag &= ~OPOST;                          // No Output Processing
-
-        SerialPortSettings.c_cc[VMIN] = 0;   // Read at least X character(s)
-        SerialPortSettings.c_cc[VTIME] = 10; // Wait 1sec (0 for indefinetly)
+        perror("Erreur open UART");
+        return -1;
     }
+
+    if(tcgetattr(fd, &SerialPortSettings) != 0)
+    {
+        return -1;
+    }
+
+    if(cfsetispeed(&SerialPortSettings, BaudRate) != 0)
+    {
+        return -1;
+    }
+    if(cfsetospeed(&SerialPortSettings, BaudRate) != 0)
+    {
+        return -1;
+    }
+
+
+    SerialPortSettings.c_cflag &= ~PARENB;
+    SerialPortSettings.c_cflag &= ~CSTOPB;
+    SerialPortSettings.c_cflag &= ~CSIZE;
+    SerialPortSettings.c_cflag |= CS8;
+    SerialPortSettings.c_cflag &= ~CRTSCTS;
+    SerialPortSettings.c_cflag |= CREAD | CLOCAL;
+
+    SerialPortSettings.c_iflag &= ~(IXON | IXOFF | IXANY);
+    SerialPortSettings.c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG);
+    SerialPortSettings.c_oflag &= ~OPOST;
+
+    SerialPortSettings.c_cc[VMIN] = 0;
+    SerialPortSettings.c_cc[VTIME] = 10;
+
+    if(tcsetattr(fd, TCSANOW, &SerialPortSettings) != 0)
+    {
+        return -1;
+    }
+    return 0;
+}
+
+int UartRead(char *buffer, int length)
+{
+    return read(fd, buffer, length);
 }
 
 void CloseUart()
 {
     close(fd);
-}
-
-void UartWrite()
-{
-}
-
-int UartRead(char *buffer[32], int length)
-{
-    tcflush(fd, TCIFLUSH);
-    return read(fd, buffer, length);
 }
