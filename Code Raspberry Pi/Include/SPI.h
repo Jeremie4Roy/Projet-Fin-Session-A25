@@ -16,7 +16,7 @@
 #define SPI_DEVICE        "/dev/spidev0.0"
 #define SPI_MODE_SET      SPI_MODE_0
 #define SPI_BITS_PER_WORD 8
-#define SPI_SPEED_HZ      1000000  // 2 MHz
+#define SPI_SPEED_HZ      6000000  // 6 MHz
 /*******************************************************************************************************************************/
 
 

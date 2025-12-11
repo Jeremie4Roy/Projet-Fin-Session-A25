@@ -124,21 +124,27 @@ void *CAN_Thread_RX(void *arg)
     uint16_t id;
     uint8_t data[8];
     uint8_t len;
-    
+
     while (1)
     {
-        if (ReadCANFrame(&id, data, &len) == 1)
+        if (ReadCANFrame(&id, data, &len))
         {
-            if ((CAN_id != id) | (CAN_Buffer != data) | (CAN_Length != len))
-            {
-                CAN_id = id;
-                for (int i = 0; i < 8; i++)
-                {
-                    CAN_Buffer[i] = data[i];
-                }
-                CAN_Length = len;
-                CAN_Read_Flag = 1;
-            }
+            if (len > 8)
+                len = 8;
+            printf("[CAN RX] ID = 0x%03X Data = ", id);
+            for (int i = 0; i < len; i++)
+                printf("%02X ", data[i]);
+            printf("\n");
+            /*if ((CAN_id != id) | (CAN_Buffer != data) | (CAN_Length != len))
+             {
+                 CAN_id = id;
+                 for (int i = 0; i < 8; i++)
+                 {
+                     CAN_Buffer[i] = data[i];
+                 }
+                 CAN_Length = len;
+                 CAN_Read_Flag = 1;
+             }*/
         }
         usleep(1000); // Evite 100% CPU
     }

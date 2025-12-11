@@ -38,7 +38,7 @@ void main()
     }
     else
     {
-        if (pthread_create(&thread_can_rx, NULL, CAN_Thread_RX, NULL) != 0 )
+        if (pthread_create(&thread_can_rx, NULL, CAN_Thread_RX, NULL) != 0)
         {
             perror("Erreur création de thread CAN RX");
             return;
@@ -54,7 +54,7 @@ void main()
 
             while (1)
             {
-                if (CAN_Read_Flag)
+                if (CAN_Read_Flag == 1)
                 {
                     CAN_Read_Flag = 0;
 
@@ -66,6 +66,6 @@ void main()
                 }
             }
         }
-        pthread_join(thread_can_rx, NULL);
     }
+    pthread_join(thread_can_rx, NULL);
 }

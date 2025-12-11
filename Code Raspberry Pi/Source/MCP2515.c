@@ -182,9 +182,9 @@ int MCP2515_SetBitrate(uint16_t bitrate_kbps)
     {
     case 125: // 125 kbps
         // On simule un quartz de 16 MHz
-        cnf1 = 0x03; // BRP=3 → TQ = 4/16MHz = 0.25µs
-        cnf2 = 0x90; // BTLMODE=1, SAM=0, PHSEG1=4TQ, PRSEG=1TQ
-        cnf3 = 0x02; // PHSEG2=5TQ, WAKFIL=0
+        cnf1 = 0x01; // BRP=3 → TQ = 4/16MHz = 0.25µs
+        cnf2 = 0xBC; // BTLMODE=1, SAM=0, PHSEG1=4TQ, PRSEG=1TQ
+        cnf3 = 0x01; // PHSEG2=5TQ, WAKFIL=0
         break;
 
     case 250: // 250 kbps
