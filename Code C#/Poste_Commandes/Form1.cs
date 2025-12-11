@@ -32,7 +32,7 @@ namespace Poste_Commandes
                     ToggleButton.Text = "On";
                     break;
             }
-
+            serialPort.Write(ToggleButton.Text + "\n");
 
         }
 
@@ -40,18 +40,13 @@ namespace Poste_Commandes
         {
             string Path_To_Image = ImagePath + "Vehicule_Perdu.png";
             serialPort = new SerialPort();
-            serialPort.PortName = "COM20";
+            serialPort.PortName = "COM1";
             serialPort.BaudRate = 19200;
             serialPort.Open();
             serialPort.DiscardInBuffer();
-<<<<<<< HEAD
             serialPort.DataReceived += new SerialDataReceivedEventHandler(SerialReception);
             FormClosing += new FormClosingEventHandler(Form_Closing);
             PositionVehiculeImage.Image = Image.FromFile(Path_To_Image);
-=======
-            serialPort.DataReceived += new SerialDataReceivedEventHandler(serialDataReceived);
-            FormClosing += new FormClosingEventHandler(Form_Closing);
->>>>>>> 56a8191b17922e0ffaa4cec6e380f782907ddd16
             CheckPorts();
         }
 
@@ -63,12 +58,13 @@ namespace Poste_Commandes
 
         private void SendingTimer_Tick(object sender, EventArgs e)
         {
-            serialPort.Write(ToggleButton.Text + "\n");
+          
         }
 
         private void Form_Closing(object sender, FormClosingEventArgs e)
         {
-            serialPort.Write("12345ABCDE\n");
+            serialPort.Write("Off\n");
+
             serialPort.Close();
         }
 
@@ -101,6 +97,10 @@ namespace Poste_Commandes
             }
             serialPort.BaudRate = 19200;
             serialPort.Open();
+        }
+
+        private void ReceiveTimer_Tick(object sender, EventArgs e)
+        {
 
         }
     }
